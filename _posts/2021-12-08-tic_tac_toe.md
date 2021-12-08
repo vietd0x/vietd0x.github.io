@@ -1,21 +1,21 @@
 ---
 title: "[pwn] tic tac toe"
 categories:
-  - Blog
+  - CTF
 tags:
   - pwn
-  - ctf
   - overwiteLastByteRet
 ---
 
 [tic tac toe [metaCTF]](https://github.com/v13td0x/Q4_21/raw/main/meta/pwn/Tic%20tac%20toe/tic_tac_toe_Release.tar.gz)
 
-> Arch:     amd64-64-little
+```apl
+Arch:     amd64-64-little
 RELRO:    Partial RELRO
 Stack:    No canary found
 NX:       NX enabled
 PIE:      PIE enabled
-> 
+```
 
 ```c
 int read_board(){
