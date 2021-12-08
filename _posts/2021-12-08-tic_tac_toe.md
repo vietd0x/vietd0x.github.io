@@ -1,4 +1,12 @@
-# Untitled
+---
+title: "[pwn] tic tac toe"
+categories:
+  - Blog
+tags:
+  - pwn
+  - ctf
+  - overwiteLastByteRet
+---
 
 [tic tac toe [metaCTF]](https://github.com/v13td0x/Q4_21/raw/main/meta/pwn/Tic%20tac%20toe/tic_tac_toe_Release.tar.gz)
 
