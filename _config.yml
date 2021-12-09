@@ -65,28 +65,28 @@ author:
   name   : "VietDo"
   bio    : "My awesome biography constrained to a sentence or two goes here."
   location: "Ha Noi, VN"
-#  links:
+ links:
 #    - label: "Website"
 #      icon: "fas fa-fw fa-link"
 #      url: "https://"
-#    - label: "Twitter"
-#      icon: "fab fa-fw fa-twitter-square"
-#      url: "https://twitter.com/"
-#    - label: "Instagram"
-#      icon: "fab fa-fw fa-instagram"
-#      url: "https://instagram.com/"
+   - label: "Twitter"
+     icon: "fab fa-fw fa-twitter-square"
+     url: "https://twitter.com/"
+   - label: "Fb"
+     icon: "fab fa-fw fa-facebook"
+     url: "https://www.facebook.com/v13td0x/"
 
-footer:
-  links:
-    - label: "Twitter"
-      icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/"
+# footer:
+#   links:
+#     - label: "Twitter"
+#       icon: "fab fa-fw fa-twitter-square"
+#       url: "https://twitter.com/"
 #    - label: "GitHub"
 #      icon: "fab fa-fw fa-github"
 #      url: "https://github.com/"
-    - label: "Facebook"
-      icon: "fab fa-fw fa-facebook"
-      url: "https://instagram.com/"
+#     - label: "Facebook"
+#       icon: "fab fa-fw fa-facebook"
+#       url: "https://instagram.com/"
 
 defaults:
   # _posts
@@ -100,6 +100,7 @@ defaults:
       comments: true
 #      share: true
       related: true
+      toc: true
   # _pages
   - scope:
       path: "_pages"
