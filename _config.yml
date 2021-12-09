@@ -72,9 +72,9 @@ links:
    - label: "Twitter"
      icon: "fab fa-fw fa-twitter-square"
      url: "https://twitter.com/"
-#    - label: "Fb"
-#      icon: "fab fa-fw fa-facebook"
-#      url: "https://www.facebook.com/v13td0x/"
+   - label: "Fb"
+     icon: "fab fa-fw fa-facebook"
+     url: "https://www.facebook.com/v13td0x/"
 
 # footer:
 #   links:
@@ -100,7 +100,7 @@ defaults:
       comments: true
 #      share: true
       related: true
-#       toc: true
+      toc: true
   # _pages
   - scope:
       path: "_pages"
