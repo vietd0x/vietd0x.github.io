@@ -1,9 +1,8 @@
 ---
 title: "[pwn] tic tac toe"
 categories:
-  - CTF
+  - CTF/pwn
 tags:
-  - pwn
   - overwiteLastByteRet
 ---
 
