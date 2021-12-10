@@ -19,7 +19,7 @@ PIE:      PIE enabled
 
 ```c
 int read_board(){
-	char board[3][3]; // $sbp-0xa
+	char board[3][3]; // $rbp-0xa
 	char counter = 0; // $rbp-0x1
 
 	//read the board in
@@ -32,7 +32,11 @@ int read_board(){
 				counter--;
 				continue;
 			}
-			if (*((char*)board + counter-1) == 'o' || *((char*)board + counter-1) == 'O' ||*((char*)board + counter-1) == '0' || *((char*)board + counter-1) == 'x' || *((char*)board + counter-1) == 'X'){
+			if (*((char*)board + counter-1) == 'o' 
+			|| *((char*)board + counter-1) == 'O' 
+			||*((char*)board + counter-1) == '0' 
+			|| *((char*)board + counter-1) == 'x' 
+			|| *((char*)board + counter-1) == 'X'){
 				break;
 			}
 			puts("Bad Character, try again");
@@ -47,15 +51,15 @@ int read_board(){
 03:0018│         0x7fff2059f848 ◂— 0x1376767676767676
 04:0020│ rbp     0x7fff2059f850 —▸ 0x7fff2059f860 ◂— 0x0
 05:0028│ rax rsi 0x7fff2059f858 —▸ 0x55b24517f645 (main+60) # ret
-pwndbg> x $rbp-0x1
-0x7fff2059f84f: 0x007fff2059f86013 # counter = 13
+pwndbg> x/x $rbp-0x1
+0x7fff2059f84f: 0x13 # counter = 13
 pwndbg> x/x $rbp+8
 0x7fff3d59caf8: 0x45 #last byte of ret addr
 ```
 
-your strategy is over last byte of ret addr 0x45→ `0x4f`, we will overwrite counter var = 0x12++. Because `board[counter=0x13]` = last byte of ret addr (0xa bytes of board + 8 byte rbp + 1 last byte ret). 
+our strategy is changing last byte of ret addr `0x45 → 0x4f`, we will overwrite counter var = 0x12++. Because `board[counter=0x13] = last byte of ret addr` (0xa bytes of board + 8 byte rbp + 1 last byte ret). 
 
-> Remember: we need 9 byte `not` in {x, X, 0, o, O} to not check counter and '\n' to increase counter var. Due to overwrite `counter` var
+> Remember: we need 9 byte `not` in {x, X, 0, o, O} to not check counter and '\n' to increase counter var. Due to overwrite it.
 > 
 
 ```python
