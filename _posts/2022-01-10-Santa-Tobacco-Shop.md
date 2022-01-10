@@ -1,4 +1,11 @@
-# Untitled
+---
+title: "[pwn] Santa Tobacco Shop"
+categories:
+  - CTF/pwn
+tags:
+  - srop
+  - int underflow
+---
 
 > checksec: disable all
 > 
@@ -11,7 +18,7 @@ Then, input `/bin//sh` to get shell
 
 ---
 
-xpl.py
+## xpl.py
 
 ```python
 #!/usr/bin/env python3
