@@ -86,7 +86,7 @@ while addr != 0x402000:# 0x602000
             binary += b'\0'
         else:
             binary += leak
-				 print(hex(addr), '0x' + leak[::-1].hex())
+	print(hex(addr), '0x' + leak[::-1].hex())
     with open('bin','wb+') as f:
         f.write(binary)
     addr += len(leak)
