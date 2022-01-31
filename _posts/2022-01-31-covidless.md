@@ -144,10 +144,6 @@ uu64 = lambda x : u64(x.ljust(8, b'\x00'))
 
 def start(argv=[], *a, **kw):
     return remote('covidless.insomnihack.ch', 6666, *a, **kw)
-gs = '''
-init-pwndbg
-continue
-'''.format(**locals())
 
 context.clear(arch = 'amd64')
 libc = ELF('./libc6_2.27-3ubuntu1_amd64.so')
