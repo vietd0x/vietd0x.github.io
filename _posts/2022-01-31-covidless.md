@@ -47,7 +47,7 @@ with `#1` i obtain some info
 84 b'\x7fELF\x02\x01\x01'
 ```
 
-and output from 2 consecutive runs, it has some same
+with #2 output from 2 consecutive runs, it has some same
 
 ```bash
 1 b'0000000000400934'
