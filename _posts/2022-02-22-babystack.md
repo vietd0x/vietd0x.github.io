@@ -9,6 +9,7 @@ tags:
 
 0CTF18
 
+[file](https://github.com/vietd0x/ctf-writeups/raw/main/babystack.tar.gz)
 ### checksec
 
 ```r
@@ -230,7 +231,7 @@ For **demonstration purposes only**, let us suppose that:
 We need to craft our `Elf32_Rel` and `Elf32_Sym` somewhere within the controllable area and provide a `rel_offset` such that the resolver reads our special forged structures. Let's suppose that the controllable (stack after pivotation ??? ) are has the following layout.
 
 ```
-						 +------------+
+	     +------------+
 r_offset     |GOT         |  0x300     
 r_info       |0x2100      |  0x304
 alignment    |AAAAAAAA    |  0x308
