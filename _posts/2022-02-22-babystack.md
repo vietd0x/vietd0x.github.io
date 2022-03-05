@@ -32,8 +32,6 @@ obviously, it’s a trivial bof, but we don’t have any emit funcs to leak. No 
 
 # lazy linking
 
----
-
 ### JMPREL (.rel.plt)
 
 Stores a table called `Relocation table`. Each entry maps to a symbol.
@@ -215,42 +213,7 @@ We can calculate the `reloc_arg` to make `.rel.plt + reloc_arg` point to our
 
 After resolving the symbol, `_dl_runtime_resolve` will call the function.
 
-# Strategy
-
----
-
-The main idea is to provide a big `rel_offset` such that the `rel_entry` to be found within our controllable area. We can craft forged structures for `Elf32_Rel`and `Elf32_Sym` that will force the `_dl_runtime_resolve` to bind the `system` function symbol. The key is that the index of the corresponding pseudo-entry should be calculated correctly. It is important not to forget that our function will be called after being resolved, so the parameter for the `system` function should already be on the stack before calling the resolver.
-
-For **demonstration purposes only**, let us suppose that:
-
-- JMPREL @ `0x0`
-- SYMTAB @ `0x100`
-- STRTAB @ `0x200`
-- controllable area @ `0x300`
-
-We need to craft our `Elf32_Rel` and `Elf32_Sym` somewhere within the controllable area and provide a `rel_offset` such that the resolver reads our special forged structures. Let's suppose that the controllable (stack after pivotation ??? ) are has the following layout.
-
-```
-	     +------------+
-r_offset     |GOT         |  0x300     
-r_info       |0x2100      |  0x304
-alignment    |AAAAAAAA    |  0x308
-st_name      |0x120       |  0x310
-st_value     |0x0         |
-st_size      |0x0         |
-others       |0x12        |
-sym_string   |"system\x00"|  0x320
-             +------------+
-```
-
-When `_dl_runtime_resolve(link_map , 0x300)` is called, the 0x300 offset is used to get the `Elf32_Rel* rel = JMPREL + 0x300 == 0x300`.
-Secondly, the Elf32_Sym is accessed using the `r_info` field from 0x304. `Elf32_Sym* sym = &SYMTAB[(0x2100 >> 8)] == 0x310`.
-The last step is to compute the address of the symbol string. This is done by adding `st_name` to `STRTAB : const char *name = STRTAB + 0x120 == 0x320`.
-**Note** that SYMTAB access its entries as an array, therefore ELF32_sym should be aligned to 0x10 bytes. Now that we control `st_name`, we can basically force the resolver to relocate `system` and call `system('sh')` .
-
 # POC
-
----
 
 ```python
 #!/usr/bin/env python3
@@ -329,5 +292,7 @@ payload3 = flat({
 io.send(payload3)
 io.interactive()
 ```
+# Reference
 
-[another detail wu](https://guyinatuxedo.github.io/18-ret2_csu_dl/0ctf18_babystack/index.html)
+[link1](https://guyinatuxedo.github.io/18-ret2_csu_dl/0ctf18_babystack/index.html)
+[link2](https://gist.github.com/ricardo2197/8c7f6f5b8950ed6771c1cd3a116f7e62)
