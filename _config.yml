@@ -108,7 +108,9 @@ defaults:
     values:
       layout: single
       author_profile: true
-
+tuts:
+  type: posts
+  path: "_tuts"
 category_archive:
   type: liquid
   path: /categories/
